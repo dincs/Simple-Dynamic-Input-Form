@@ -1,0 +1,197 @@
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+function gpa(){
+	if(btnSubmit){
+		var id = document.frm.id.value;
+		var name = document.frm.name.value;
+		var prog = document.frm.prog.value;
+		var subject = document.frm.subject.value;
+		var sem = document.frm.sem.value;
+		var no = document.frm.no.value;
+		var gpa = 0.0;
+		var totalGPA = 0.0;
+		var totalCredit = 0;
+		var status;
+
+		if(name==""){
+				alert("Please Enter Name!!");
+				document.getElementsByName("name").focus();
+				return false;
+				}	
+
+		if(sem==""){
+				alert("Please Enter Semester!!");
+				document.getElementsByName("sem").focus();
+				return false;
+				}	
+
+		for(var i=0;i<no;i++){
+			var code = document.getElementsByName("code")[i].value;
+			var credit = parseInt(document.getElementsByName("credit")[i].value);
+			var grade = document.getElementsByName("grade")[i].value;
+
+			if(code==""){
+				alert("Please Enter code!!");
+				document.getElementsByName("code").focus();
+				return false;
+				}
+				if(credit==""){
+				alert("Please Enter credit!!");
+				document.getElementsByName("credit").focus();
+				return false;
+				}
+				if(grade==""){
+				alert("Please Enter Name!!");
+				document.getElementsByName("grade").focus();
+				return false;
+				}
+
+			if(grade=="A+"){
+				gpa += credit*4;
+				totalCredit += credit;
+			}
+			if(grade=="A"){
+				gpa += credit*4;
+				totalCredit += credit;
+			}
+			if(grade=="A-"){
+				gpa += credit*3.67;
+				totalCredit += credit;
+			}
+			if(grade=="B+"){
+				gpa += credit*3.33;
+				totalCredit += credit;
+			}
+			if(grade=="B"){
+				gpa += credit*3;
+				totalCredit += credit;
+			}
+			if(grade=="B-"){
+				gpa += credit*2.67;
+				totalCredit += credit;
+			}
+			if(grade=="C+"){
+				gpa += credit*2.33;
+				totalCredit += credit;
+			}
+			if(grade=="C"){
+				gpa += credit*2;
+				totalCredit += credit;
+			}
+			if(grade=="C-"){
+				gpa += credit*1.67;
+				totalCredit += credit;
+			}
+			if(grade=="D+"){
+				gpa += credit*1.33;
+				totalCredit += credit;
+			}
+			if(grade=="D"){
+				gpa += credit*1;
+				totalCredit += credit;
+			}
+			if(grade=="E"){
+				gpa += credit*0.67;
+				totalCredit += credit;
+			}
+			if(grade=="F"){
+				gpa += credit*0;
+				totalCredit += credit;
+			}
+		}
+		totalGPA = gpa/totalCredit;
+		if(totalGPA>=3.5){
+			status= "Dean List"
+			alert(
+
+		"ID: " + id + "\nName: " + name + "\nProgram: " + prog + "\nSemester: " + sem + "\nGPA: " + totalGPA.toFixed(2) + "\nStatus: " + status);
+		}
+		else{
+			alert(
+
+		"ID: " + id + "\nName: " + name + "\nProgram: " + prog + "\nSemester: " + sem + "\nGPA: " + totalGPA.toFixed(2));
+		;
+		}
+		
+	}
+}
+</script>
+</head>
+<body>
+	<form name="frm" onsubmit="false">
+		ID: <input type="text" name="id" maxlength="10" onkeyup="onlyNum()"> <br>
+		<script>
+			function onlyNum(){
+				var id = document.frm.id.value;			
+
+				if(isNaN(id)){
+					alert("Please Enter Number Only!");
+					document.frm.id.value="";
+					document.getElementsByName("id").focus();
+					return false;
+				}
+			}
+		</script>
+		Name: <input type="text" name="name" onkeyup="onlyNum()"><br>
+		Program: <br>Diploma<input type="radio" name="prog" value="Diploma"><br>
+					Degree<input type="radio" name="prog" value="Degree" checked> <br>
+		Number of subjects: <input type="text" maxlength="1" size=1 name="subject" id="subject" onkeyup="generate()"> <br>
+		Semester <select name="sem">
+					<option value="">Select Sem
+					<option value="1">1
+					<option value="2">2
+					<option value="3">3
+					<option value="4">4
+					<option value="5">5
+					<option value="6">6
+				</select><br>
+				<table id=genTable align=center>
+
+				
+		<script>
+			function generate(){
+				var x = document.getElementById("subject").value;
+				var con = confirm("Are you sure?");
+				if(x==0){
+					alert("Must not be empty and must be more than 0");
+						document.frm.subject.value="";
+						document.getElementsByName("subject").focus();
+						return false;
+				}
+					if(isNaN(x)){
+						alert("Please Enter Number Only!");
+						document.frm.subject.value="";
+						document.getElementsByName("subject").focus();
+						return false;
+						}
+					else{
+						if(con==true){
+							document.getElementById("subject").disabled = true;
+						document.getElementById("genTable").innerHTML+=
+						"<tr align=center><td colspan=4> Calculate GPA</tr><tr align=center><td><b>No.<td><b>Code<td><b>Credit<td><b>Grade</tr>"
+						;
+						for(var i=0;i<x;i++){
+						document.getElementById("genTable").innerHTML+=
+						"<tr><td>"+(i+1)+"<td><input type='text' name='code'><td><input type='text' maxlength=1 size=1 name='credit'><td><input type='text' name='grade'></tr>";
+						}
+						document.getElementById("genTable").innerHTML+="<input type='hidden' name='no' value="+x+">";
+						}
+						else{
+							document.frm.subject.value="";
+							document.getElementsByName("subject").focus();
+							return false;
+						}
+						
+					}
+			}
+		</script>
+		</table>
+		<p id="displayResult"></p>
+		<button id="btnSubmit" onClick="gpa()">GPA</button>
+		<input type="reset">
+	</form>
+</body>
+
+</html>
