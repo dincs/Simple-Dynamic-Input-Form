@@ -1,7 +1,50 @@
 <html>
 <head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 15%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+input[type=reset] {
+    width: 15%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+input[type=reset]:hover {
+    background-color: #45a049;
+}
+</style>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
+	var count=0;
 function gpa(){
 	if(btnSubmit){
 		var id = document.frm.id.value;
@@ -120,8 +163,7 @@ function gpa(){
 </script>
 </head>
 <body>
-	<form name="frm" onsubmit="false">
-		ID: <input type="text" name="id" maxlength="10" onkeyup="onlyNum()"> <br>
+	<form name="frm" onsubmit="return false">
 		<script>
 			function onlyNum(){
 				var id = document.frm.id.value;			
@@ -134,32 +176,39 @@ function gpa(){
 				}
 			}
 		</script>
-		Name: <input type="text" name="name" onkeyup="onlyNum()"><br>
-		Program: <br>Diploma<input type="radio" name="prog" value="Diploma"><br>
-					Degree<input type="radio" name="prog" value="Degree" checked> <br>
-		Number of subjects: <input type="text" maxlength="1" size=1 name="subject" id="subject" onkeyup="generate()"> <br>
-		Semester <select name="sem">
-					<option value="">Select Sem
+		<table>
+		<tr>
+		<td>Matrix Number <td><input type="text" name="id" maxlength="10" onkeyup="onlyNum()"> 
+		</tr>
+		<tr>
+		<td>Name <td><input type="text" name="name" onkeyup="onlyNum()">
+		</tr>
+		<tr>
+		<td>Program <td>Diploma<input type="radio" name="prog" value="Diploma">
+					Degree<input type="radio" name="prog" value="Degree" checked> 
+		</tr>
+		<tr>
+		<td>Number of subjects <td><input type="text" maxlength="1" size=1 name="subject" id="subject" onkeydown="delTable()" onkeyup="generate()">
+		</tr>
+		<tr>
+		<td>Semester <td><select name="sem">
+					<option value="">Select Semester
 					<option value="1">1
 					<option value="2">2
 					<option value="3">3
 					<option value="4">4
 					<option value="5">5
 					<option value="6">6
-				</select><br>
+				</select>
+		</tr>
+		</table>
 				<table id=genTable align=center>
 
 				
 		<script>
 			function generate(){
 				var x = document.getElementById("subject").value;
-				var con = confirm("Are you sure?");
-				if(x==0){
-					alert("Must not be empty and must be more than 0");
-						document.frm.subject.value="";
-						document.getElementsByName("subject").focus();
-						return false;
-				}
+				if(count==0){
 					if(isNaN(x)){
 						alert("Please Enter Number Only!");
 						document.frm.subject.value="";
@@ -167,24 +216,70 @@ function gpa(){
 						return false;
 						}
 					else{
-						if(con==true){
-							document.getElementById("subject").disabled = true;
+						if(x==""){
+							document.getElementsByName("subject").focus();
+							}
+					else{
 						document.getElementById("genTable").innerHTML+=
-						"<tr align=center><td colspan=4> Calculate GPA</tr><tr align=center><td><b>No.<td><b>Code<td><b>Credit<td><b>Grade</tr>"
+						"<tr align=center><td colspan=4><h1>Calculate GPA</h1></tr><tr align=center><td><b>No.<td><b>Code<td><b>Credit<td><b>Grade</tr>"
 						;
 						for(var i=0;i<x;i++){
 						document.getElementById("genTable").innerHTML+=
-						"<tr><td>"+(i+1)+"<td><input type='text' name='code'><td><input type='text' maxlength=1 size=1 name='credit'><td><input type='text' name='grade'></tr>";
-						}
+						"<tr><td>"+(i+1)+"<td><input type='text' name='code'><td><input type='text' maxlength=1 size=1 name='credit'><td><select name='grade'>"
+					+"<option value=''>Select Grade"
+					+"<option value='A+'>A+"
+					+"<option value='A'>A"
+					+"<option value='A-'>A-"
+					+"<option value='B+'>B+"
+					+"<option value='B'>B"
+					+"<option value='B-'>B-"
+					+"<option value='C+'>C+"
+					+"<option value='C'>C"
+					+"<option value='C-'>C-"
+					+"<option value='D+'>D+"
+					+"<option value='D'>D"
+					+"<option value='E'>E"
+					+"<option value='F'>F"
+				+"</select></tr>";						}
 						document.getElementById("genTable").innerHTML+="<input type='hidden' name='no' value="+x+">";
-						}
-						else{
-							document.frm.subject.value="";
-							document.getElementsByName("subject").focus();
-							return false;
-						}
-						
 					}
+					}
+				}
+				else{
+					var genTable = document.getElementById("genTable");
+					genTable.innerHTML="";
+					count=0;
+					document.getElementById("genTable").innerHTML+=
+						"<tr align=center><td colspan=4><h1>Calculate GPA</h1></tr><tr align=center><td><b>No.<td><b>Code<td><b>Credit<td><b>Grade</tr>"
+						;
+					for(var i=0;i<x;i++){
+						document.getElementById("genTable").innerHTML+=
+						"<tr><td>"+(i+1)+"<td><input type='text' name='code'><td><input type='text' maxlength=1 size=1 name='credit'><td><select name='grade'>"
+					+"<option value=''>Select Grade"
+					+"<option value='A+'>A+"
+					+"<option value='A'>A"
+					+"<option value='A-'>A-"
+					+"<option value='B+'>B+"
+					+"<option value='B'>B"
+					+"<option value='B-'>B-"
+					+"<option value='C+'>C+"
+					+"<option value='C'>C"
+					+"<option value='C-'>C-"
+					+"<option value='D+'>D+"
+					+"<option value='D'>D"
+					+"<option value='E'>E"
+					+"<option value='F'>F"
+				+"</select></tr>";						}
+						document.getElementById("genTable").innerHTML+="<input type='hidden' name='no' value="+x+">"; 
+				}
+				count++;
+			}
+			function delTable(){
+				var x = document.getElementById("subject").value;
+				if(x==""){
+					var genTable = document.getElementById("genTable");
+					genTable.innerHTML="";
+				}
 			}
 		</script>
 		</table>
